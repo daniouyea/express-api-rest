@@ -21,7 +21,6 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "data.json"
     ]
   },
   "prisma": {
