@@ -1,46 +1,24 @@
-import Prisma from '@prisma/client'
-const { PrismaClient } = Prisma;
-const prisma = new PrismaClient()
-
+import userService from '../services/user.service.js'
+import pick from '../utils/pick.js'
 
 const userController = {
     async getUsers(req, res) {
-        let where = {}
-        let include = {}
-        if (req.query.name) {
-            where.name = { contains: req.query.name }
-        }
-        if (req.query.withPosts) {
-            include.posts = { where: { published: true } }
-        }
-        const users = await prisma.user.findMany({
-            where,
-            include,
-            orderBy: {
-                name: 'asc'
-            }
-        })
+        const filter = pick(req.query, ['name']);
+        const options = pick(req.query, ['orderBy', 'limit', 'page']);
+        const include = pick(req.query, ['withPosts', 'withProfile']);
+        const users = await userService.queryUsers(filter, options, include);
+
         res.status(200).json(users)
     },
 
     async getUser(req, res) {
-        let where = {}
-        let include = {}
-        if (req.params.id) {
-            where.id = req.params.id
-        }
-        if (req.query.name) {
-            where.name = {contains: req.query.name}
-        }
-        if (req.query.withPosts) {
-            include.posts = { where: { published: true } }
-        }
-        const user = await prisma.user.findFirst({
-            where,
-            include
-        })
+        const id = parseInt(req.params.id);
+        const include = pick(req.query, ['withPosts', 'withProfile']);
+        const user = await userService.getUser(id, include);
+        
         res.status(200).json(user)
     },
+
     async createUser(req, res) {
         const userSelect = {
             name: true,
