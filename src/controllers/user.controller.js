@@ -20,17 +20,10 @@ const userController = {
     },
 
     async createUser(req, res) {
-        const userSelect = {
-            name: true,
-        }
-        const user = await prisma.user.create({
-            data: {
-                name: req.body.name,
-            },
-            select: userSelect
-        })
+        const user = await userService.createUser(req.body);
+
         if (user) {
-            return res.status(201).json(user)
+            res.status(201).json(user)
         } else {
             res.status(400).json({
                 message: 'Error creating user'
@@ -38,18 +31,9 @@ const userController = {
         }
     },
     async updateUser(req, res) {
-        const userSelect = {
-            name: true,
-        }
-        const user = await prisma.user.update({
-            where: {
-                id: parseInt(req.params.id)
-            },
-            data: {
-                name: req.body.name,
-            },
-            select: userSelect
-        })
+        const id = parseInt(req.params.id);
+        const user = await userService.updateUser(id, req.body.name);
+
         if (user) {
             res.status(200).json(user)
         }else {

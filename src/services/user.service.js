@@ -71,17 +71,46 @@ const userService = {
      * @param {boolean} [includes.withPosts] - Include posts
      * @param {boolean} [includes.withProfile] - Include profile
      * @returns {Promise<User>}
-    */
+     */
     async getUser(id, includes) {
         const filter = { id };
         const options = {many: false};
         return this.queryUsers(filter, options, includes)
     },
 
-    async createUser() {
+    /**
+     * Create a user
+     * @param {String} name - User name
+     * @returns {Promise<User>}
+     */
+    async createUser(name) {
+        const userSelect = {
+            name: true,
+        }
+        const user = await prisma.user.create({
+            data: { name },
+            select: userSelect
+        })
+        return user
     },
 
-    async updateuser() {
+
+    /**
+     * Update a user
+     * @param {number} id - User id
+     * @param {String} name - User name
+     * @returns {Promise<User>}
+     */
+    async updateUser(id, name) {
+        const userSelect = {
+            name: true,
+        }
+        const user = await prisma.user.update({
+            where: { id },
+            data: { name },
+            select: userSelect
+        })
+        return user
     },
 }
 
