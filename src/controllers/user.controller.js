@@ -55,7 +55,7 @@ const userController = {
             return res.status(201).json(user)
         } else {
             res.status(400).json({
-                message: 'Error al crear el usuario'
+                message: 'Error creating user'
             })
         }
     },
@@ -76,7 +76,7 @@ const userController = {
             res.status(200).json(user)
         }else {
             res.status(400).json({
-                message: 'Error al actualizar el usuario'
+                message: 'Error updating user'
             })
         }
     },
