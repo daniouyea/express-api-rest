@@ -1,6 +1,9 @@
 import Prisma from '@prisma/client'
+import authMiddleware from '../middlewares/auth.middleware.js'
+
 const { PrismaClient } = Prisma;
 const prisma = new PrismaClient()
+prisma.$use(authMiddleware)
 
 const userService = {
     /**
