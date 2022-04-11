@@ -46,19 +46,14 @@ async function posts() {
     });
 
     for (let i = 0; i < postsAmount; i++) {
-        let categoriesConnected = categoriesId
-            .filter(category => {
-                return Math.random() > 0.6
-            })
-            .map(function (category) {
-                return { id: category.id }
-            })
         let post = {
             title: faker.lorem.sentence(),
             content: faker.lorem.paragraph(),
             published: faker.datatype.boolean(),
             categories: {
-                connect: categoriesConnected
+                connect: categoriesId
+                            .filter(category => Math.random() > 0.7)
+                            .map(category => ({ id: category.id }))
             },
             author: {
                 connect: {
